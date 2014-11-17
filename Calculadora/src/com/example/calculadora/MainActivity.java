@@ -1,279 +1,192 @@
 package com.example.calculadora;
 
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
+import android.os.Bundle;
 
 
-public class MainActivity extends ActionBarActivity {
-	double temporal=0; 
-	double resultado=0;
-	String simbolo="";
-	boolean igualPresionado=false;
-	EditText txtResultado = (EditText) findViewById(R.id.txtResultado);
-
+public class MainActivity extends ActionBarActivity 
+{
+	TextView txtResultado;
+	String strResultado="";
+	String strSimbolo ="";
+	String strNumeroAnterior="";
+	String strNumeroActual="";
+	
+	boolean presionoPunto = false;
+	boolean presionoIgual = false;
+	
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) 
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        txtResultado.setText("0");
         
-        //DECLARATION
-        Button btnClear = (Button) findViewById(R.id.btnClear);
-        Button btn0 = (Button) findViewById(R.id.btn0);
-        Button btn1 = (Button) findViewById(R.id.btn1);
-        Button btn2 = (Button) findViewById(R.id.btn2);
-        Button btn3 = (Button) findViewById(R.id.btn3);
-        Button btn4 = (Button) findViewById(R.id.btn4);
-        Button btn5 = (Button) findViewById(R.id.btn5);
-        Button btn6 = (Button) findViewById(R.id.btn6);
-        Button btn7 = (Button) findViewById(R.id.btn7);
-        Button btn8 = (Button) findViewById(R.id.btn8);
-        Button btn9 = (Button) findViewById(R.id.btn9);
-        Button btnSuma = (Button) findViewById(R.id.btnSuma);
-        Button btnResta = (Button) findViewById(R.id.btnResta);
-        Button btnMultiplicacion = (Button) findViewById(R.id.btnMultiplicacion);
-        Button btnDivision = (Button) findViewById(R.id.btnDivision);
-        Button btnPunto = (Button) findViewById(R.id.btnPunto);
-        Button btnIgual = (Button) findViewById(R.id.btnIgual);
-        
-        
-        //LISTENER
-        btnClear.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				initialize();
-			}
-		});
-        
-        btn0.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setText("0");
-			}
-		});
-        
-        btn1.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setText("1");
-			}
-		});
-        
-        btn2.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setText("2");
-			}
-		});
-        
-        btn3.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setText("3");
-			}
-		});
-        
-        btn4.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setText("4");
-			}
-		});
-        
-        btn5.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setText("5");
-			}
-		});
-        
-        btn6.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setText("6");
-			}
-		});
-        
-        btn7.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setText("7");
-			}
-		});
-        
-        btn8.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setText("8");
-			}
-		});
-        
-        btn9.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setText("9");
-			}
-		});
-        
-        btnPunto.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setText(".");
-			}
-		});
-        
-        btnSuma.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				simbolo = "+";
-				txtResultado.setText("0");
-			}
-		});
-        
-        btnResta.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				simbolo = "-";
-				txtResultado.setText("0");
-			}
-		});
-        
-        btnMultiplicacion.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				simbolo = "*";
-				txtResultado.setText("0");
-			}
-		});
-        
-        btnDivision.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				simbolo = "/";
-				txtResultado.setText("0");
-			}
-		});
-        
-        btnIgual.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				setResult();
-			}
-		});
+       txtResultado = (TextView) findViewById(R.id.txtOperaciones);
+       txtResultado.setText("0");
     }
     
-    //FUNCTIONS
-    public void setText(String numero)
+    public void clicClear(View v)
     {
-    	String textoResultado;
-    	
-    	if(igualPresionado == true)
+    	this.clearVariables();
+    }
+    
+    public void clicSuma(View v)
+    {
+    	this.setSimbol("+");
+    }
+    
+    public void clicResta(View v)
+    {
+    	this.setSimbol("-");
+    }
+    
+    public void clicMultiplicacion(View v)
+    {
+    	this.setSimbol("*");
+    }
+    
+    public void clicDivicion(View v)
+    {
+    	this.setSimbol("/");
+    }
+    
+    public void clicIgual(View v)
+    {
+    	this.showResult();
+    	presionoIgual = true;
+    }
+    
+    public void clic0(View v)
+    {
+    	this.setNewText("0");
+    }
+    
+    public void clic1(View v)
+    {
+    	this.setNewText("1");
+    }
+    
+    public void clic2(View v)
+    {
+    	this.setNewText("2");
+    }
+    
+    public void clic3(View v)
+    {
+    	this.setNewText("3");
+    }
+    
+    public void clic4(View v)
+    {
+    	this.setNewText("4");
+    }
+    
+    public void clic5(View v)
+    {
+    	this.setNewText("5");
+    }
+    
+    public void clic6(View v)
+    {
+    	this.setNewText("6");
+    }
+    
+    public void clic7(View v)
+    {
+    	this.setNewText("7");
+    }
+    
+    public void clic8(View v)
+    {
+    	this.setNewText("8");
+    }
+    
+    public void clic9(View v)
+    {
+    	this.setNewText("9");
+    }
+    
+    public void clicPunto(View v)
+    {
+    	if(!presionoPunto)
     	{
-    		textoResultado = numero;
-    		igualPresionado = false;
-    	}
-    	else
-    	{
-    		textoResultado = txtResultado.getText().toString();
-        	
-        	//si es diferente a 0
-        	if(textoResultado.equalsIgnoreCase("0") == false)
-        	{
-        		textoResultado = textoResultado+numero;
-        	}
-        	else 
-        	{
-        		if(numero.equalsIgnoreCase("."))
-        		{
-        			textoResultado = "0.";
-        		}else{
-        			textoResultado = numero;
-        		}
-        	}
-        	temporal = Double.parseDouble(textoResultado);
-        	txtResultado.setText(textoResultado);
+    		this.setNewText(".");
+    		presionoPunto = true;
     	}
     }
     
-    public void setResult()
+    private void setNewText(String numero)
     {
-    	txtResultado  = (EditText) findViewById(R.id.txtResultado);
-    	double numeroActual = Double.parseDouble(txtResultado.getText().toString());
-    	
-    	switch(simbolo)
+    	if(presionoIgual)
     	{
-    	 case "+":
-    		resultado = temporal + numeroActual;
-    		txtResultado.setText(Double.toString(resultado));
-    		break;
-    	 case "-":
-    		resultado = temporal - numeroActual;
-    		txtResultado.setText(Double.toString(resultado));
-    		break;
-    	 case "*":
-    		resultado = temporal * numeroActual;
-    		txtResultado.setText(Double.toString(resultado));
-    		break;
-    	 case "/":
-    		resultado = temporal / numeroActual;
-    		txtResultado.setText(Double.toString(resultado));
-    		break;
-    	 default:
     		txtResultado.setText("0");
-    		break;
+    		presionoIgual = false;
     	}
+		
+		strResultado = txtResultado.getText().toString();
     	
-    	simbolo = "0";
+		if(numero.equalsIgnoreCase(".") && strResultado.equalsIgnoreCase("0"))
+		{
+			strResultado = "0"+numero;
+		}else if(strResultado.equalsIgnoreCase("0"))
+		{
+			strResultado = numero;
+		}
+		else
+		{
+			strResultado+=numero;
+		}
+		txtResultado.setText(strResultado);
     }
     
-    public void initialize()
-	{
-    	temporal = 0;
-    	resultado = 0;
-    	simbolo = "";
-    	igualPresionado = false;
-		txtResultado.setText("0");
-	}
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    private void setSimbol(String simbolo)
+    {
+    	strSimbolo = simbolo;
+    	strNumeroAnterior = txtResultado.getText().toString();
+    	txtResultado.setText("0");
+    	
+    	presionoPunto = false;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    
+    private void showResult()
+    {
+    	double numeroAnterior = Double.parseDouble(strNumeroAnterior);
+    	double numeroActual = Double.parseDouble(txtResultado.getText().toString());
+    	double operacion = 0;
+    	
+    	presionoPunto = false;
+    	
+    	if(strSimbolo == "+")
+    	{ 
+    		operacion = numeroAnterior + numeroActual;
+    	}
+    	if(strSimbolo == "-")
+    	{
+    		operacion = numeroAnterior - numeroActual;
+    	}
+    	if(strSimbolo == "*")
+    	{
+    		operacion = numeroAnterior * numeroActual;
+    	}
+    	if(strSimbolo == "/")
+    	{
+    		operacion = numeroAnterior / numeroActual;
+    	}
+    	
+    	strNumeroAnterior = Double.toString(operacion);
+    	txtResultado.setText(Math.rint(operacion*10000)/10000+"");
+    }
+    
+    private void clearVariables()
+    {
+    	txtResultado.setText("0");
+    	strResultado = "";
+    	strSimbolo = "";
+    	strNumeroAnterior = "";
+    	strNumeroActual = "";
+    	presionoPunto = false;
+    	presionoIgual = false;
     }
 }
